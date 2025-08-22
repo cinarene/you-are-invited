@@ -1,0 +1,316 @@
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Party Invitation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f3f0;
+            color: #4b4b4b;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            background-color: #4b4b4b;
+            color: #fff;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .message-box.show {
+            opacity: 1;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .btn {
+            background-color: #a36f54;
+            color: #fff;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .btn:hover {
+            background-color: #8c5d45;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Container -->
+    <div class="container mt-10">
+
+        <!-- Message Box for user feedback -->
+        <div id="message-box" class="message-box"></div>
+
+        <!-- Main Invitation View -->
+        <div id="invitation-view" class="">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-800">You're Invited!</h1>
+                <p class="mt-2 text-xl text-gray-600">to [Your Name]'s Birthday Party</p>
+                <img src="https://placehold.co/400x200/e9d7c4/5a4a3e?text=Party+Time" alt="Placeholder image for a party" class="mt-6 w-full h-auto rounded-xl shadow-lg">
+            </div>
+
+            <!-- Party Details -->
+            <div class="mt-8 p-6 bg-gray-50 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4">Event Details</h2>
+                <ul class="space-y-2 text-gray-700">
+                    <li class="flex items-center"><span class="font-bold w-24">Date:</span> Saturday, [Month] [Day], 2024</li>
+                    <li class="flex items-center"><span class="font-bold w-24">Time:</span> 7:00 PM - Late</li>
+                    <li class="flex items-center"><span class="font-bold w-24">Location:</span> [Venue Name]</li>
+                    <li class="flex items-center"><span class="font-bold w-24">Address:</span> [Venue Address]</li>
+                </ul>
+            </div>
+
+            <!-- RSVP Form -->
+            <div class="mt-8">
+                <h2 class="text-2xl font-semibold text-center mb-4">Will you be there?</h2>
+                <form id="rsvp-form" class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                        <input type="text" id="name" name="name" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-700">Your Answer</p>
+                        <div class="mt-2 space-y-2">
+                            <div class="flex items-center">
+                                <input id="rsvp-yes" name="rsvp" type="radio" value="yes" required class="focus:ring-amber-500 h-4 w-4 text-amber-600 border-gray-300">
+                                <label for="rsvp-yes" class="ml-3 block text-sm font-medium text-gray-700">Yes, I'll be there!</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="rsvp-no" name="rsvp" type="radio" value="no" required class="focus:ring-amber-500 h-4 w-4 text-amber-600 border-gray-300">
+                                <label for="rsvp-no" class="ml-3 block text-sm font-medium text-gray-700">No, I can't make it.</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full btn mt-4 rounded-full">Submit RSVP</button>
+                </form>
+            </div>
+
+            <!-- Host Login Section -->
+            <div class="mt-12 pt-6 border-t border-gray-200 text-center">
+                <h3 class="text-lg font-semibold text-gray-800">Are you the host?</h3>
+                <form id="host-login-form" class="mt-4 flex flex-col items-center space-y-4">
+                    <input type="password" id="host-code" placeholder="Enter secret code" class="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-full shadow-sm focus:ring-amber-500 focus:border-amber-500 text-center">
+                    <button type="submit" class="w-full max-w-sm btn rounded-full">Go</button>
+                </form>
+                <div id="host-error-message" class="text-red-500 text-sm mt-2 hidden"></div>
+            </div>
+        </div>
+
+        <!-- Host Dashboard View (initially hidden) -->
+        <div id="dashboard-view" class="hidden">
+            <h1 class="text-3xl font-bold text-center mb-4 text-gray-800">Host Dashboard</h1>
+
+            <!-- Party details and current host ID -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 p-4 bg-gray-50 rounded-lg">
+                <p class="text-gray-700">Host ID: <span id="host-id" class="font-mono text-xs break-all"></span></p>
+                <p class="text-gray-700 mt-2 md:mt-0">Guests Attending: <span id="yes-count" class="font-bold text-green-600">0</span></p>
+            </div>
+            
+            <h2 class="text-2xl font-semibold mb-4">Guest List</h2>
+            <div id="guest-list-container" class="space-y-4">
+                <div id="no-rsvps-message" class="text-center text-gray-500">No RSVPs yet.</div>
+                <div id="yes-rsvps-list" class="space-y-2"></div>
+                <div id="no-rsvps-list" class="space-y-2 mt-4"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, addDoc, onSnapshot, collection, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables provided by the Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // --- Firebase Initialization and Authentication ---
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        let userId;
+
+        // --- Helper Functions ---
+        function showMessage(text, type = 'info') {
+            const messageBox = document.getElementById('message-box');
+            messageBox.textContent = text;
+            messageBox.className = `message-box show ${type === 'error' ? 'bg-red-500' : 'bg-gray-800'}`;
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, 3000);
+        }
+
+        function switchView(viewId) {
+            const invitationView = document.getElementById('invitation-view');
+            const dashboardView = document.getElementById('dashboard-view');
+            invitationView.classList.add('hidden');
+            dashboardView.classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        function renderRsvps(rsvps) {
+            const yesRsvpsList = document.getElementById('yes-rsvps-list');
+            const noRsvpsList = document.getElementById('no-rsvps-list');
+            const noRsvpsMessage = document.getElementById('no-rsvps-message');
+            const yesCountDisplay = document.getElementById('yes-count');
+
+            yesRsvpsList.innerHTML = '';
+            noRsvpsList.innerHTML = '';
+            let yesCount = 0;
+
+            if (rsvps.length === 0) {
+                noRsvpsMessage.classList.remove('hidden');
+            } else {
+                noRsvpsMessage.classList.add('hidden');
+                rsvps.forEach(rsvp => {
+                    const rsvpItem = document.createElement('div');
+                    rsvpItem.className = "flex items-center space-x-2 p-3 rounded-lg";
+                    const statusText = rsvp.response === 'yes' ? 'Attending' : 'Not Attending';
+                    const statusColor = rsvp.response === 'yes' ? 'text-green-600' : 'text-red-500';
+                    if (rsvp.response === 'yes') { yesCount++; }
+
+                    rsvpItem.innerHTML = `
+                        <div class="flex-grow">
+                            <span class="font-medium text-gray-800">${rsvp.name}</span>
+                            <span class="${statusColor} text-sm ml-2">(${statusText})</span>
+                        </div>
+                    `;
+
+                    if (rsvp.response === 'yes') {
+                        rsvpItem.classList.add('bg-green-50');
+                        yesRsvpsList.appendChild(rsvpItem);
+                    } else {
+                        rsvpItem.classList.add('bg-red-50');
+                        noRsvpsList.appendChild(rsvpItem);
+                    }
+                });
+            }
+            yesCountDisplay.textContent = yesCount;
+        }
+
+        // --- Event Listeners and Logic ---
+
+        // Main app initialization function
+        async function initializeApp() {
+            try {
+                // Attempt to sign in with a custom token if available
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                    console.log("Signed in with custom token.");
+                } else {
+                    await signInAnonymously(auth);
+                    console.log("Signed in anonymously.");
+                }
+                
+                // Set the user ID and start listening for RSVPs
+                userId = auth.currentUser.uid;
+                document.getElementById('host-id').textContent = userId;
+                startRsvpListener();
+
+                // Add event listeners for forms
+                document.getElementById('rsvp-form').addEventListener('submit', handleRsvpSubmit);
+                document.getElementById('host-login-form').addEventListener('submit', handleHostLogin);
+
+            } catch (error) {
+                console.error("Authentication failed:", error);
+                showMessage('Authentication failed. Please refresh the page.', 'error');
+            }
+        }
+
+        // RSVP Form Submission
+        async function handleRsvpSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const rsvp = document.querySelector('input[name="rsvp"]:checked').value;
+            const collectionPath = `/artifacts/${appId}/public/data/rsvps`;
+            const rsvpData = { name, response: rsvp, timestamp: new Date() };
+
+            if (!userId) {
+                showMessage("Authentication in progress. Please wait a moment and try again.");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, collectionPath), rsvpData);
+                showMessage('Thank you for your response!', 'success');
+                event.target.reset();
+            } catch (error) {
+                console.error("Error adding document:", error);
+                showMessage('Failed to submit RSVP. Please try again.', 'error');
+            }
+        }
+
+        // Host Login
+        function handleHostLogin(event) {
+            event.preventDefault();
+            const hostCode = document.getElementById('host-code').value;
+            const secretCode = 'birthday2024';
+            const hostErrorMessage = document.getElementById('host-error-message');
+
+            if (hostCode === secretCode) {
+                switchView('dashboard-view');
+                hostErrorMessage.classList.add('hidden');
+                // The listener for RSVPs is already running from initialization
+            } else {
+                hostErrorMessage.textContent = 'Invalid code. Try again.';
+                hostErrorMessage.classList.remove('hidden');
+            }
+        }
+
+        // Real-time RSVP Listener for the Dashboard
+        function startRsvpListener() {
+            const collectionPath = `/artifacts/${appId}/public/data/rsvps`;
+            const q = query(collection(db, collectionPath));
+
+            try {
+                onSnapshot(q, (snapshot) => {
+                    const rsvps = [];
+                    snapshot.forEach(doc => {
+                        rsvps.push(doc.data());
+                    });
+                    renderRsvps(rsvps);
+                }, (error) => {
+                    console.error("Error listening to RSVPs:", error);
+                    // Provide a more user-friendly error message if permissions are the issue
+                    if (error.code === 'permission-denied') {
+                        showMessage("Access Denied: You do not have permission to view this data. Please update your Firebase Security Rules.", "error");
+                    }
+                });
+            } catch (error) {
+                console.error("Error setting up onSnapshot listener:", error);
+                showMessage("An error occurred while setting up the dashboard. Please try again.", "error");
+            }
+        }
+
+        // Start the app when the page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+    </script>
+</body>
+</html>

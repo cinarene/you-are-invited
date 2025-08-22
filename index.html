@@ -108,13 +108,13 @@
                 </form>
             </div>
 
-            <!-- Host Login Section -->
+            <!-- Host Login Section (without a form tag) -->
             <div class="mt-12 pt-6 border-t border-gray-200 text-center">
                 <h3 class="text-lg font-semibold text-gray-800">Are you the host?</h3>
-                <form id="host-login-form" class="mt-4 flex flex-col items-center space-y-4">
+                <div id="host-login-section" class="mt-4 flex flex-col items-center space-y-4">
                     <input type="password" id="host-code" placeholder="Enter secret code" class="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-full shadow-sm focus:ring-amber-500 focus:border-amber-500 text-center">
                     <button id="go-btn" type="button" class="w-full max-w-sm btn rounded-full">Go</button>
-                </form>
+                </div>
                 <div id="host-error-message" class="text-red-500 text-sm mt-2 hidden"></div>
             </div>
         </div>
@@ -270,6 +270,7 @@
 
         // Host Login
         function handleHostLogin() {
+            console.log("Host login button clicked.");
             const hostCode = document.getElementById('host-code').value;
             const secretCode = 'birthday2024';
             const hostErrorMessage = document.getElementById('host-error-message');
@@ -316,4 +317,3 @@
     </script>
 </body>
 </html>
-

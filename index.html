@@ -1,4 +1,4 @@
-<!Doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -113,7 +113,7 @@
                 <h3 class="text-lg font-semibold text-gray-800">Are you the host?</h3>
                 <form id="host-login-form" class="mt-4 flex flex-col items-center space-y-4">
                     <input type="password" id="host-code" placeholder="Enter secret code" class="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-full shadow-sm focus:ring-amber-500 focus:border-amber-500 text-center">
-                    <button type="submit" class="w-full max-w-sm btn rounded-full">Go</button>
+                    <button id="go-btn" type="button" class="w-full max-w-sm btn rounded-full">Go</button>
                 </form>
                 <div id="host-error-message" class="text-red-500 text-sm mt-2 hidden"></div>
             </div>
@@ -235,7 +235,13 @@
 
                 // Add event listeners for forms
                 document.getElementById('rsvp-form').addEventListener('submit', handleRsvpSubmit);
-                document.getElementById('host-login-form').addEventListener('submit', handleHostLogin);
+
+                // Modified Host Login Logic
+                document.getElementById('go-btn').addEventListener('click', handleHostLogin);
+                document.getElementById('host-login-form').addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    handleHostLogin();
+                });
 
             } catch (error) {
                 console.error("Authentication failed:", error);
@@ -268,16 +274,19 @@
 
         // Host Login
         function handleHostLogin(event) {
-            event.preventDefault();
+            if (event) {
+                event.preventDefault();
+            }
             const hostCode = document.getElementById('host-code').value;
             const secretCode = 'birthday2024';
             const hostErrorMessage = document.getElementById('host-error-message');
 
             if (hostCode === secretCode) {
+                console.log("Correct host code entered. Switching to dashboard view.");
                 switchView('dashboard-view');
                 hostErrorMessage.classList.add('hidden');
-                // The listener for RSVPs is already running from initialization
             } else {
+                console.log("Incorrect host code entered.");
                 hostErrorMessage.textContent = 'Invalid code. Try again.';
                 hostErrorMessage.classList.remove('hidden');
             }
@@ -290,6 +299,7 @@
 
             try {
                 onSnapshot(q, (snapshot) => {
+                    console.log("New RSVP data received.");
                     const rsvps = [];
                     snapshot.forEach(doc => {
                         rsvps.push(doc.data());
@@ -297,7 +307,6 @@
                     renderRsvps(rsvps);
                 }, (error) => {
                     console.error("Error listening to RSVPs:", error);
-                    // Provide a more user-friendly error message if permissions are the issue
                     if (error.code === 'permission-denied') {
                         showMessage("Access Denied: You do not have permission to view this data. Please update your Firebase Security Rules.", "error");
                     }
@@ -315,3 +324,4 @@
 </body>
 </html>
 
+            

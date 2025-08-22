@@ -238,10 +238,6 @@
 
                 // Modified Host Login Logic
                 document.getElementById('go-btn').addEventListener('click', handleHostLogin);
-                document.getElementById('host-login-form').addEventListener('submit', (event) => {
-                    event.preventDefault();
-                    handleHostLogin();
-                });
 
             } catch (error) {
                 console.error("Authentication failed:", error);
@@ -273,10 +269,7 @@
         }
 
         // Host Login
-        function handleHostLogin(event) {
-            if (event) {
-                event.preventDefault();
-            }
+        function handleHostLogin() {
             const hostCode = document.getElementById('host-code').value;
             const secretCode = 'birthday2024';
             const hostErrorMessage = document.getElementById('host-error-message');
